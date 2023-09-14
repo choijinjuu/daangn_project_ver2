@@ -6,30 +6,8 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 
-	<style>
-        .footer_wrap{
-            width: 800px;
-            height: 150px;
-            margin: auto;
-            font-size: 13px;
-            color: rgb(85, 85, 85);
-        }
-        #footer_1{
-            padding: 5px 0 0 0;
-            letter-spacing: 1px;
-        }
-        #footer_2>div{
-            float: left;
-        }
-        #footer_2 a{
-            text-decoration: none;
-            padding: 26px;
-            color: rgb(85, 85, 85);
-        }
-        #footer_2 a:hover{
-            font-weight: 600;
-        }
-    </style>
+	<!-- css참조 -->
+	<link rel="stylesheet" href="resources/css/common.css">
 
 </head>
 <body>

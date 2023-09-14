@@ -1,0 +1,75 @@
+@charset "UTF-8";
+
+#enroll_wrap{
+    width: 800px;
+    height: 640px;
+    margin: auto;
+    border-radius: 20px;
+    background-color: rgb(255, 239, 229);
+}
+#enroll_text{
+	width: 700px;
+	height: 70px;
+	margin: auto;
+	padding-top: 20px;
+}
+#enroll_text span{
+	font-size: 25px;
+	font-weight: 500;
+}
+#enroll_form{
+    width: 700px;
+    margin: auto;
+    margin-top: 10px;
+}
+.enroll_area{
+	width: 100%;
+	height: 80px;
+	padding: 5px;
+}
+.enroll_area input{
+	border: 0.1px solid rgb(225, 225, 225);
+    outline: none;
+    background-color: white;
+}
+.enroll_area2{
+	width: 290px;
+	height: 32px;
+	border-radius: 5px;
+	margin-top: 5px;
+}
+#enroll_go{
+	margin-top: 10px;
+	margin-left: 90px;
+	height: 35px;
+	width: 80px;
+}
+#enroll_go button{
+	height: 100%;
+	width: 100%;
+	background-color: white;
+	border: 1px solid black;
+	border-radius: 5px;
+}
+#enroll_go button:hover{
+	background-color: rgb(255, 250, 247);
+	cursor: pointer;
+}
+#daangn_img{
+	height: 400px;
+	width: 300px;
+	background-color: red;
+	margin-left: 400px;
+	margin-top: -440px;
+	border-radius: 10px;
+}
+#daangn_img img{
+	width: 100%;
+	height: 100%;
+}
+.error_text{
+	font-size: 13px;
+	margin-left: 5px;
+	margin-top: 2px;
+	color: red;
+}
