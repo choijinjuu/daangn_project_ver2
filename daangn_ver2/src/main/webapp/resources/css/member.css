@@ -2,7 +2,7 @@
 
 #enroll_wrap{
     width: 800px;
-    height: 640px;
+    height: 730px;
     margin: auto;
     border-radius: 20px;
     background-color: rgb(255, 239, 229);
@@ -24,7 +24,7 @@
 }
 .enroll_area{
 	width: 100%;
-	height: 80px;
+	height: 83px;
 	padding: 5px;
 }
 .enroll_area input{
@@ -60,7 +60,7 @@
 	width: 300px;
 	background-color: red;
 	margin-left: 400px;
-	margin-top: -440px;
+	margin-top: -520px;
 	border-radius: 10px;
 }
 #daangn_img img{
@@ -71,5 +71,5 @@
 	font-size: 13px;
 	margin-left: 5px;
 	margin-top: 2px;
-	color: red;
+	font-weight: 600;
 }

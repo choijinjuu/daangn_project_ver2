@@ -1,5 +1,7 @@
 package com.jj.daangn_ver2.member.model.service;
 
+import java.util.HashMap;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,10 +29,22 @@ public class MemberServiceImpl implements MemberService {
 
 	//아이디, 닉네임 중복 확인 메소드
 	@Override
-	public int checkMe(String checkText) {
-		System.out.println(checkText);
-		//return sqlSession.selectOne("memberMapper.checkMe", checkText);
-		return 1;
+	public int checkMe(Member m) {
+		return memberDao.checkMe(sqlSession, m);
 	}
+
+	//아이디 찾기 및 비밀번호 찾기 진행시 인증번호 발송
+	@Override
+	public String searchMe(HashMap<String, String> info) {
+		return memberDao.searchMe(sqlSession, info);
+	}
+
+	//로그인 메소드
+	@Override
+	public Member loginMember(Member m) {
+		return memberDao.loginMember(sqlSession, m);
+	}
+
+
 
 }

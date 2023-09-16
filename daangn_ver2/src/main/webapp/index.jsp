@@ -7,8 +7,11 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<%@ include file="WEB-INF/views/common/header.jsp" %>
-	
-	<%@ include file="WEB-INF/views/common/footer.jsp"%>
+	<script>
+		//플리마켓 리스트로
+		window.onload = function(){
+			location.href = "listForm.bo?category=1&currentPage=1&subCategory=0";
+		}
+	</script>
 </body>
 </html>
