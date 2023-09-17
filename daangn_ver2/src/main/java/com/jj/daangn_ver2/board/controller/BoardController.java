@@ -85,12 +85,11 @@ public class BoardController {
 		
 		//각 카테고리별로
 		if(b.getCategory().equals("1")) {
-			System.out.println(boardInfo);
+			
 			//중고거래 카테고리로 들어왔을시
 			b = boardService.boardDetail(boardInfo);
 //			ArrayList<Reply> r = new ReplyService().selectReply(boardNo);
-			System.out.println(b);
-			System.out.println(b.getSubCategory());
+			
 			switch(b.getSubCategory()) {
 				case "1" : b.setSubCategory("디지털기기");
 				break;
@@ -103,7 +102,7 @@ public class BoardController {
 				case "5" : b.setSubCategory("기타");
 				break;
 			}
-			System.out.println(b);
+
 			//조회수도 올려주기
 			boardService.countUp(b.getBoardNo());
 			
@@ -132,7 +131,7 @@ public class BoardController {
 				case "5" : b.setSubCategory("기타");
 						break;
 			}
-			System.out.println(b);
+			
 			//조회수도 올려주기
 			boardService.countUp(b.getBoardNo());
 
@@ -144,7 +143,6 @@ public class BoardController {
 			b = boardService.boardDetail(boardInfo);
 //			ArrayList<Reply> r = new ReplyService().selectReply(boardNo);
 			
-			System.out.println(b);
 			//조회수도 올려주기
 			boardService.countUp(b.getBoardNo());
 
@@ -224,10 +222,49 @@ public class BoardController {
 			for(int i=0; i<list.size(); i++) {
 				new File(session.getServletContext().getRealPath("/"+list.get(i).getAtPath())).delete();
 			}
-			mv.addObject("errorMsg", "축제 게시글 등록에 실패하였습니다.").setViewName("common/errorPage");
+			mv.addObject("errorMsg", "게시글 등록에 실패하였습니다.").setViewName("common/errorPage");
 		}
 		
 		return mv;
 	}
-
+	
+	//게시글 수정 페이지로 돌려주기
+	@RequestMapping("updateForm.bo")
+	public ModelAndView updateForm(Board b, ModelAndView mv) {
+		mv.addObject("b", b).setViewName("board/boardUpdateForm");
+		return mv;
+	}
+	
+	//게시글 수정
+	@RequestMapping("update.bo")
+	public ModelAndView updateBoard(Board b, ModelAndView mv) {
+		
+		mv.addObject("b", b).setViewName("board/boardUpdateForm");
+		return mv;
+	}
+	
+	//게시글 삭제
+	@RequestMapping("delete.bo")
+	public ModelAndView deleteBoard(@RequestParam("atPath")String atPath, Board b, ModelAndView mv, HttpSession session) {
+		
+		String boardNo = String.valueOf(b.getBoardNo());
+		
+		HashMap<String, String> boardInfo = new HashMap<>();
+			boardInfo.put("category", b.getCategory());
+			boardInfo.put("boardNo", boardNo);
+			
+		int result = boardService.deleteBoard(boardInfo);
+		
+		if(result>0) {
+			//삭제 성공시
+			mv.setViewName("redirect:/");
+			//파일도 같이 지워주기
+			new File(session.getServletContext().getRealPath("/"+atPath)).delete();
+		}else {
+			//삭제 실패시
+			mv.addObject("errorMsg", "게시글 삭제에 실패하였습니다.").setViewName("common/errorPage");
+		}
+		
+		return mv;
+	}
 }

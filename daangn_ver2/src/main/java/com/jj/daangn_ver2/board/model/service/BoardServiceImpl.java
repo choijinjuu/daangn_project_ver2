@@ -64,4 +64,20 @@ public class BoardServiceImpl implements BoardService{
 		boardDao.countUp(sqlSession, boardNo);
 	}
 
+	//게시글 삭제
+	@Override
+	@Transactional
+	public int deleteBoard(HashMap<String, String> boardInfo) {
+		
+		//보드 게시글 삭제
+		int result1 = boardDao.deleteBoard(sqlSession, boardInfo);
+		//관련 어태치먼트 게시글 삭제
+		int result2 = boardDao.deleteAttach(sqlSession, boardInfo);
+		//관련 카테고리 게시글 삭제
+		int result3 = boardDao.deleteBoardCate(sqlSession, boardInfo);
+		
+		return result1*result2*result3;
+	}
+
+
 }

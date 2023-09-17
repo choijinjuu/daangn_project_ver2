@@ -57,8 +57,8 @@
 			margin-top: 2px;
 		}
 		#flea_btn_area{
-			margin-left: 410px;
-			margin-top: 35px;
+			margin-left: 350px;
+			margin-top: 30px;
 		}
 		#flea_btn_area button{
 			border-radius: 3px;
@@ -204,19 +204,22 @@
 				<div id="flea_address">${b.member.address }</div>
 			</div>
 			<div id="flea_btn_area">
-				<%-- <%if (loginMember!=null && loginMember.getMemberId().equals(b.getWriter())) {%> --%>
-					<!-- 로그인 되어있으며 게시글 작성자일때 -->
-					<%-- <button type="button" onclick="location.href='<%=contextPath%>/update.bo?category=1&boardNo=<%=b.getBoardNo()%>'">수정</button>
-					<button type="button" onclick="boardDelete();">삭제</button>				
-				<%}else if (loginMember!=null && !loginMember.getMemberId().equals(b.getWriter()) || loginMember == null) {%> --%>
-					<!-- 로그인 되어있지만 게시글 작성자가 아닐때
-						또는 로그인 안되어있을때 -->
-					<button style="visibility: hidden;">수정</button>
-					<button style="visibility: hidden;">삭제</button>
-				<%-- <%}%> --%>
+				<c:choose>
+					<c:when test="${not empty loginMember and loginMember.memNo == b.memNo}">
+						<!-- 로그인 되어있으며 게시글 작성자일때 -->
+						<button type="button" onclick="location.href='updateForm.bo?category=1&boardNo=${b.boardNo}'">수정</button>
+						<button type="button" onclick="boardDelete();">삭제</button>					
+					</c:when>
+					<c:when test="${not empty loginMember and loginMember.memNo != b.memNo}">
+						<!-- 로그인 되어있지만 게시글 작성자가 아닐때
+							또는 로그인 안되어있을때 -->
+						<button style="visibility: hidden;">수정</button>
+						<button style="visibility: hidden;">삭제</button>
+					</c:when>
+				</c:choose>
 			</div>
 		</div>
-		<hr style="border: 0.1px solid rgb(224, 224, 224); width: 680px;">
+		<hr style="border: 0.1px solid rgb(224, 224, 224); width: 680px; margin: auto">
 		<div class="flea_all" id="fleaDe_text_area">
 			<div>
 				<div id="flea_title"><strong>${b.title }</strong></div>
@@ -227,7 +230,7 @@
 				<pre>${b.content }</pre>
 			</div>
 		</div>
-		<hr style="border: 0.1px solid rgb(224, 224, 224); width: 680px;">
+		<hr style="border: 0.1px solid rgb(224, 224, 224); width: 680px; margin: auto">
 		
 		<%-- <%for (Reply r : rlist) {%>
 			<div id='reply_area'>
@@ -304,21 +307,21 @@
 	
 	<%@ include file = "../common/footer.jsp" %>
 	
-	<%-- <script>
+	<script>
 		//게시물 삭제
 		function boardDelete(){
 			var result = confirm("게시물을 정말 삭제하시겠습니까?");
 			
 			if(result){
 				alert("삭제되었습니다.");
-				location.href = "<%=contextPath%>/delete.bo?cate=1&boardNo=<%=b.getBoardNo()%>";
+				location.href = "delete.bo?category=1&boardNo=${b.boardNo}&atPath=${b.attachment.atPath }";
 			}else{
 				alert("삭제가 취소되었습니다.");
 			}
 		}
 		
 		//댓글 목록
-		 function selectReview(){
+		 <%-- function selectReview(){
 	      		$.ajax({
 	      			url : "reply.re",
 	      			data : {boardNo : <%=b.getBoardNo()%>},
@@ -415,7 +418,7 @@
 			      	alert("로그인 후 댓글 작성이 가능합니다.");
 			      	location.href='<%=contextPath%>/login.me';
 		    }
-	      <%}%>
-	</script> --%>
+	      <%}%> --%>
+	</script>
 </body>
 </html>

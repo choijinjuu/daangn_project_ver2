@@ -198,4 +198,30 @@
 		WHERE BOARD_NO = #{boardNo}
 	</update>
 	
+	<!-- 게시글 삭제 -->
+	<delete id="deleteBoard">
+		DELETE BOARD
+		WHERE BOARD_NO = #{boardNo}
+	</delete>
+	<!-- 관련 어태치먼트 게시글 삭제 -->
+	<delete id="deleteATTACH">
+		DELETE ATTACHMENT
+		WHERE BOARD_NO = #{boardNo}
+	</delete>
+	<!-- 관련 카테고리 게시글 삭제 -->
+	<delete id="deleteBoardCate">
+		<if test="category == 1">
+			DELETE FLEAMARKET
+			WHERE BOARD_NO = #{boardNo}
+		</if>
+		<if test="category == 2">
+			DELETE STORES
+			WHERE BOARD_NO = #{boardNo}
+		</if>
+		<if test="category == 3">
+			DELETE JOBS
+			WHERE BOARD_NO = #{boardNo}
+		</if>
+	</delete>
+	
 </mapper>

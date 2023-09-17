@@ -67,5 +67,18 @@ public class BoardDao {
 		
 	}
 
+	//게시글 삭제
+	public int deleteBoard(SqlSession sqlSession, HashMap<String, String> boardInfo) {
+		return sqlSession.delete("boardMapper.deleteBoard", boardInfo);
+	}
+	//관련 어태치먼트 게시글 삭제
+	public int deleteAttach(SqlSession sqlSession, HashMap<String, String> boardInfo) {
+		return sqlSession.delete("boardMapper.deleteATTACH", boardInfo);
+	}
+	//관련 카테고리 게시글 삭제
+	public int deleteBoardCate(SqlSession sqlSession, HashMap<String, String> boardInfo) {
+		return sqlSession.delete("boardMapper.deleteBoardCate", boardInfo);
+	}
+
 
 }

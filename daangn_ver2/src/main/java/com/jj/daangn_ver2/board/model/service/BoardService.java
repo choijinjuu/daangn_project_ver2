@@ -24,4 +24,7 @@ public interface BoardService {
 	//조회수 올려주기
 	void countUp(int boardNo);
 
+	//게시글 삭제
+	int deleteBoard(HashMap<String, String> boardInfo);
+
 }
