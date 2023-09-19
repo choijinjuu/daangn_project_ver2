@@ -9,6 +9,7 @@
 		<result column="MEM_NO" property="memNo"/>
 		<result column="TITLE" property="title"/>
 		<result column="CONTENT" property="content"/>
+		<result column="CATEGORY" property="category"/>
 		<result column="COUNT" property="count"/>
 		<result column="CREATE_DATE" property="createDate"/>
 		<result column="SUB_CATEGORY" property="subCategory"/>

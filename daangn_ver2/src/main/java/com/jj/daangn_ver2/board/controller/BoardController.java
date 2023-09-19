@@ -231,7 +231,18 @@ public class BoardController {
 	//게시글 수정 페이지로 돌려주기
 	@RequestMapping("updateForm.bo")
 	public ModelAndView updateForm(Board b, ModelAndView mv) {
-		mv.addObject("b", b).setViewName("board/boardUpdateForm");
+		
+		String boardNo = String.valueOf(b.getBoardNo());
+		
+		HashMap<String, String> boardInfo = new HashMap<>();
+			boardInfo.put("category", b.getCategory());
+			boardInfo.put("boardNo", boardNo);
+		
+		Board boardDetail = boardService.boardDetail(boardInfo);
+		
+		System.out.println(boardDetail);
+		
+		mv.addObject("b", boardDetail).setViewName("board/boardUpdateForm");
 		return mv;
 	}
 	

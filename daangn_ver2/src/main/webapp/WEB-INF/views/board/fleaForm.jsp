@@ -5,7 +5,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-
 	<style>
 		#flea{
             color: rgb(246, 117, 37) !important;
@@ -136,9 +135,6 @@
 		#flea_title{
 			font-size: 16px;
 		}
-		/* #flea_title>div{
-			float: left;
-		} */
 		#joayo_area{
 			margin-top: -25px;
 		    margin-left: 170px;
@@ -188,9 +184,7 @@
 
 </head>
 <body>
-	
 	<%@ include file="../common/header.jsp" %>
-	
 	<div id="main_wrap">
 		<div id="main_banner">
 			<img src="resources/css_img/fleamarket_banner_img.png">
@@ -200,8 +194,6 @@
 				<div id="content_title">
 					<div id="content_title_el2">
 						<div id="flea_search">
-							<!-- <input type="hidden" name="cate" value="1">
-							<input type="hidden" name="currentPage" value="1"> -->
 							<select name="subCategory" id="subCategory">
 						        <option value="0">키워드 검색</option>
 						        <option value="1">디지털기기</option>
@@ -238,7 +230,7 @@
 								<div id="flea_img">
 									<img src="${b.attachment.atPath }">
 								</div>
-								<input type="hidden" id="mamNo" name="memNo" value='${b.memNo }'>
+								<input type="hidden" id="memNo" name="memNo" value='${b.memNo }'>
 								<div id="flea_text">
 									<div id="flea_title">
 										${fn:substring (b.title, 0,10) }...
@@ -342,9 +334,7 @@
 			</div>
 		</div>
 	</div>
-	
 	<%@ include file="../common/footer.jsp"%>
-	
 	<script>
 		//로그인 안되어있는데 글쓰기 버튼 눌렀을시
 		function loginGo(){
@@ -353,6 +343,5 @@
 			$('#exampleModal').modal('show');
 		}
 	</script>
-	
 </body>
 </html>
