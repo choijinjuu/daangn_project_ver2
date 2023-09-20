@@ -67,18 +67,34 @@ public class BoardDao {
 		
 	}
 
+	//게시글 수정
+	public int updateBoard(SqlSession sqlSession, Board b, ArrayList<Attachment> list) {
+		//게시글 수정
+		int result1 = sqlSession.update("boardMapper.updateBoard", b);
+		//게시글 카테고리 수정
+		int result2 = sqlSession.update("boardMapper.updateCate", b);
+		//관련 어태치 삭제
+		sqlSession.delete("boardMapper.deleteAttach", b.getBoardNo());
+		//어태치 다시 등록
+		for(Attachment at : list) {
+			int result3 = sqlSession.insert("boardMapper.updateAttachment", at);
+		}
+		return result1 * result2;
+	}
+
 	//게시글 삭제
 	public int deleteBoard(SqlSession sqlSession, HashMap<String, String> boardInfo) {
 		return sqlSession.delete("boardMapper.deleteBoard", boardInfo);
 	}
 	//관련 어태치먼트 게시글 삭제
 	public int deleteAttach(SqlSession sqlSession, HashMap<String, String> boardInfo) {
-		return sqlSession.delete("boardMapper.deleteATTACH", boardInfo);
+		return sqlSession.delete("boardMapper.deleteAttach", boardInfo);
 	}
 	//관련 카테고리 게시글 삭제
 	public int deleteBoardCate(SqlSession sqlSession, HashMap<String, String> boardInfo) {
 		return sqlSession.delete("boardMapper.deleteBoardCate", boardInfo);
 	}
+
 
 
 }

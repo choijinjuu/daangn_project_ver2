@@ -203,163 +203,13 @@
 <body>
 
 	<%@ include file = "../common/header.jsp" %>
-	<%-- <div id="board_wrap">
-		<div id="board_title">
-			<strong>글 수정하기</strong>
-		</div>
-		<div id="content_area">
-			<form action="update.bo?boardNo=${b.boardNo }" method="post" id="content_area_form" enctype="multipart/form-data">
-				<!-- 회원 번호도 넘기기 -->
-				<input type="hidden" name="memNo" id="memNo" value="${b.memNo }">
-				<div class="board_area">
-					<div class="board_area_1"><strong>카테고리 분류</strong></div>
-					<!-- 들어온 카테고리에 따라 -->
-					<div class="board_area_2" id="board_area_2">
-						<select name="category" id="category">
-				            <option value="0">카테고리 분류</option>
-				            <option value="1">중고거래</option>
-				            <option value="2">동네가게</option>
-				            <option value="3">알바</option>
-				        </select>
-				        <c:choose>
-				        	<c:when test="${b.category eq '1' }">
-						        <select name="subCategory" id="subCategory" class="newSelect">
-									<option value="1">디지털기기</option>
-									<option value="2">스포츠/레저</option>
-									<option value="3">생활/가전</option>
-									<option value="4">티켓/교환권</option>
-									<option value="5">기타</option>
-								</select>
-				        	</c:when>
-				        	<c:when test="${b.category eq '2' }">
-								<select name="subCategory" id="subCategory" class="newSelect">
-									<option value="1">식당</option>
-									<option value="2">카페</option>
-									<option value="3">뷰티/미용</option>
-									<option value="4">운동</option>
-									<option value="5">기타</option>
-								</select>
-				        	</c:when>
-				        </c:choose>
-					</div>
-				</div>		
-				<div class="board_area">
-					<div class="board_area_1"><strong>제목</strong></div>
-					<div class="board_area_2">
-						<input type="text" name="title" id="title">
-					</div>
-				</div>		
-				<div class="board_area">
-					<div class="board_area_1"><strong>작성자</strong></div>
-					<div class="board_area_2">
-						<input type="text" value="${b.member.nickName }" disabled>
-					</div>
-				</div>
-				<div class="board_area add1">
-					<div class="board_area_1"><strong>주소</strong></div>
-					<div class="board_area_2">
-						<input type="text" name="address" id="address" onclick="postcode();">
-					</div>
-				</div>
-				<!-- 들어온 카테고리에 따라 -->
-				<c:choose>
-					<c:when test="${b.category eq '1' }">
-						<div class="board_area1">
-							<div class="board_area_1"><strong>가격</strong></div>
-							<div class="board_area_2">
-								<input type="number" name="price" id="price" value="${b.price }">
-							</div>
-						</div>
-						<div class="board_area add3" id="content_id">
-							<div class="board_area_1"><strong>내용</strong></div>
-							<div class="board_area_2">
-								<textarea name="content" id="content">${b.content }</textarea>
-							</div>
-						</div>
-					</c:when>
-					<c:when test="${b.category eq '2' }">
-						<div class="board_area2">
-							<div class="board_area_1 add2"><strong>매장 시간</strong></div>
-							<div class="board_area_2">
-								<select name="open_h" id="open_h">
-									<option value="00">00시</option>
-									<option value="08">08시</option>
-									<option value="09">09시</option>
-									<option value="10">10시</option>
-									<option value="11">11시</option>
-									<option value="12">12시</option>
-								</select>
-								<select name="open_m" id="open_m">
-									<option value="00">00분</option>
-									<option value="10">10분</option>
-									<option value="20">20분</option>
-									<option value="30">30분</option>
-									<option value="40">40분</option>
-									<option value="50">50분</option>
-								</select>
-								<strong> ~ </strong>
-									<select name="close_h" id="close_h">
-									<option value="00">00시</option>
-									<option value="17">17시</option>
-									<option value="18">18시</option>
-									<option value="19">19시</option>
-									<option value="20">20시</option>
-									<option value="21">21시</option>
-								</select>
-								<select name="close_m" id="close_m">
-									<option value="00">00분</option>
-									<option value="10">10분</option>
-									<option value="20">20분</option>
-									<option value="30">30분</option>
-									<option value="40">40분</option>
-									<option value="50">50분</option>
-								</select>
-							</div>
-						</div>
-						<div class="board_area add3" id="content_id">
-							<div class="board_area_1"><strong>내용</strong></div>
-							<div class="board_area_2">
-								<textarea name="content" id="content">${b.content }</textarea>
-							</div>
-						</div>
-					</c:when>
-					<c:when test="${b.category eq '3' }">
-						<div class="board_area2">
-							<div class="board_area_1"><strong>근무 날짜</strong></div>
-							<div class="board_area_2 job_area">
-								<input type="date" name="jobDate" id="jobDate">
-							</div>
-						</div>
-						<div class="board_area add3" id="content_id">
-							<div class="board_area_1"><strong>내용</strong></div>
-							<div class="board_area_2">
-								<textarea name="content" id="content">${b.content }</textarea>
-							</div>
-						</div>
-					</c:when>
-				</c:choose>
-				<div class="board_area">
-					<div class="board_area_1"><strong>첨부파일</strong></div>
-					<div class="board_area_2">
-						<input type="file" id="file1" name="file1">
-					</div>
-				</div>
-				<div class="board_area" id="board_btn_area">
-					<div class="board_area_1"></div>
-					<div class="board_area_2" id="board_btn">
-						<button type="submit">등록</button>
-					</div>
-				</div>
-			</form>
-		</div>
-	</div> --%>
 	
 	<div id="board_wrap">
 		<div id="board_title">
 			<strong>글 등록하기</strong>
 		</div>
 		<div id="content_area">
-			<form action="insert.bo" method="post" id="content_area_form" enctype="multipart/form-data">
+			<form action="update.bo?boardNo=${b.boardNo }" method="post" id="content_area_form" enctype="multipart/form-data">
 				<!-- 회원 번호도 넘기기 -->
 				<input type="hidden" name="memNo" id="memNo" value="${loginMember.memNo }">
 				<div class="board_area">
@@ -565,8 +415,8 @@
 			<script>
 				$(function(){
 					//값 집어넣기
-					$("#category").val(${b.category}).attr("selected","selected");
-					$("#subCategory").val(${b.subCategory}).attr("selected","selected");
+					$("#category").val('${b.category}').attr("selected","selected");
+					$("#subCategory").val('${b.subCategory}').attr("selected","selected");
 					/* $("#title").val('${b.title}'); */
 					/* $("#address").val('${b.address}'); */
 				})

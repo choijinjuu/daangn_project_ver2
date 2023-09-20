@@ -54,8 +54,6 @@ public class MemberController {
 		String encPwd = bcryptPasswordEncoder.encode(m.getMemPwd());
 		m.setMemPwd(encPwd);
 		
-//		System.out.println(m);
-		
 		int result = memberService.insertMember(m);
 		
 		if(result>0) {
@@ -189,7 +187,7 @@ public class MemberController {
 	//로그인 메소드
 	@RequestMapping("login.me")
 	public String loginMember(String saveId, @RequestParam("userId")String memId, String userPwd, Member m, Model model, HttpServletRequest request, HttpSession session, HttpServletResponse response) {
-		
+
 		//아이디 저장
 		Cookie cookie = null;
 		
@@ -206,7 +204,7 @@ public class MemberController {
 		
 		m.setMemId(memId);
 		Member loginMember = memberService.loginMember(m);
-
+		
 		if(loginMember!=null && bcryptPasswordEncoder.matches(userPwd, loginMember.getMemPwd())) {
 			
 			//로그인 유저 있으면 -> 유저 정보 담기

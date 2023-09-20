@@ -64,6 +64,12 @@ public class BoardServiceImpl implements BoardService{
 		boardDao.countUp(sqlSession, boardNo);
 	}
 
+	//게시글 수정
+	@Override
+	public int updateBoard(Board b, ArrayList<Attachment> list) {
+		return boardDao.updateBoard(sqlSession, b, list);
+	}
+
 	//게시글 삭제
 	@Override
 	@Transactional
@@ -78,6 +84,7 @@ public class BoardServiceImpl implements BoardService{
 		
 		return result1*result2*result3;
 	}
+
 
 
 }

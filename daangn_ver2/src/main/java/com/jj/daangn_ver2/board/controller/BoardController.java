@@ -29,11 +29,11 @@ public class BoardController {
 	@Autowired
 	public BoardService boardService;
 	
-	//중고거래 페이지로
+	//게시글 페이지로
 	@RequestMapping("listForm.bo")
-	public String ListForm(@RequestParam(value="category", defaultValue="1")String category,
+	public ModelAndView ListForm(@RequestParam(value="category", defaultValue="1")String category,
 								@RequestParam(value="currentPage", defaultValue="0")int currentPage,
-								@RequestParam(value="subCategory", defaultValue="0")String subCategory, Model model) {
+								@RequestParam(value="subCategory", defaultValue="0")String subCategory, ModelAndView mv) {
 		
 		//축제 페이지 로드시 찜 리스트 불러오기
 //		ArrayList<choice> choiceList = festivalService.choiList();
@@ -49,28 +49,56 @@ public class BoardController {
 //			keyword.put("area", area);
 //			keyword.put("cate", cate);
 //			keyword.put("day", nowDay);
+		if(category.equals("1")) {
+			//중고거래 게시판
+			//검색 리스트 가져가기
+			HashMap<String, String> keyword = new HashMap<>();
+				keyword.put("category", category);
+				keyword.put("subCategory", subCategory);
+			
+			//게시글 총 수
+			int listCount = boardService.listCount(keyword);
+			
+			int pageLimit = 10;
+			int boardLimit = 6;
+			
+			PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+			
+			//게시글 리스트
+			ArrayList<Board> list = boardService.boardList(keyword, pi);
+			
+	//		mv.addAttribute("list",list);
+	//		mv.addAttribute("pi",pi);
+			mv.addObject("list", list);
+			mv.addObject("pi", pi);
+			mv.setViewName("board/fleaForm");
+	//		model.addAttribute("choiceList", new Gson().toJson(choiceList));
+		}else if(category.equals("2")) {
+			//동네가게 게시판
+			//검색 리스트 가져가기
+			HashMap<String, String> keyword = new HashMap<>();
+				keyword.put("category", category);
+				keyword.put("subCategory", subCategory);
+			
+			//게시글 총 수
+			int listCount = boardService.listCount(keyword);
+			System.out.println(listCount);
+			int pageLimit = 10;
+			int boardLimit = 8;
+			
+			PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+			
+			//게시글 리스트
+			ArrayList<Board> list = boardService.boardList(keyword, pi);
+			System.out.println(list);
+			mv.addObject("list", list);
+			mv.addObject("pi", pi);
+			mv.setViewName("board/storeForm");
+		}else {
+			
+		}
 		
-		//검색 리스트 가져가기
-		HashMap<String, String> keyword = new HashMap<>();
-			keyword.put("category", category);
-			keyword.put("subCategory", subCategory);
-		
-		//게시글 총 수
-		int listCount = boardService.listCount(keyword);
-		
-		int pageLimit = 10;
-		int boardLimit = 6;
-		
-		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
-		
-		//게시글 리스트
-		ArrayList<Board> list = boardService.boardList(keyword, pi);
-		
-		model.addAttribute("list",list);
-		model.addAttribute("pi",pi);
-//		model.addAttribute("choiceList", new Gson().toJson(choiceList));
-		
-		return "board/fleaForm";
+		return mv;
 	}
 	
 	//게시글 상세 페이지
@@ -240,17 +268,74 @@ public class BoardController {
 		
 		Board boardDetail = boardService.boardDetail(boardInfo);
 		
-		System.out.println(boardDetail);
-		
 		mv.addObject("b", boardDetail).setViewName("board/boardUpdateForm");
 		return mv;
 	}
 	
 	//게시글 수정
 	@RequestMapping("update.bo")
-	public ModelAndView updateBoard(Board b, ModelAndView mv) {
+	public ModelAndView updateBoard(@RequestParam(value="open_h", defaultValue="00")String open_h,
+									@RequestParam(value="open_m", defaultValue="00")String open_m,
+									@RequestParam(value="close_h", defaultValue="00")String close_h,
+									@RequestParam(value="close_m", defaultValue="00")String close_m,
+									Board b, MultipartFile[] upfile,  HttpSession session, ModelAndView mv) {
 		
-		mv.addObject("b", b).setViewName("board/boardUpdateForm");
+		//파일 이름 바꾸기
+		ArrayList<Attachment> list = new ArrayList<>();
+		
+		for(int i=0; i<upfile.length; i++) {
+			
+			if(!upfile[i].getOriginalFilename().equals("")) {//파일이 있으면
+					
+				String originName = upfile[i].getOriginalFilename();
+				String currentTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+				int ranNum = (int) (Math.random()*90000+10000);
+				//확장자명 추출
+				String ext = originName.substring(originName.lastIndexOf("."));
+				//추출한 문자열 합쳐서 changeName만들기
+				String changeName = currentTime+ranNum+ext;
+				//업로드하는 경로
+				String filePath = session.getServletContext().getRealPath("/resources/board_img/");
+				
+				//경로와 수정파일명 합쳐서 파일 업로드
+				try {
+					upfile[i].transferTo(new File(filePath+changeName));
+				} catch (IllegalStateException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				Attachment at = new Attachment();
+					at.setBoardNo(b.getBoardNo());
+					at.setAtName(originName);
+					at.setAtChange(changeName);
+					at.setAtPath("resources/board_img/"+changeName);
+
+					//파일 레벨 나누기
+					if(i==0) {
+						at.setFileLevel(1);
+					}else {
+						at.setFileLevel(2);
+					}
+				list.add(at);
+			}
+		}
+		
+		//동네가게들어왔을시 오픈시간, 클로즈시간 처리
+		if(b.getCategory().equals("2")) {
+			String openTime = open_h+"시 "+open_m+"분";
+			String closeTime= close_h+"시 "+close_m+"분";
+			b.setOpenTime(openTime);
+			b.setCloseTime(closeTime);
+		}
+		
+		int result = boardService.updateBoard(b,list);
+		
+		if(result>0) {
+			session.setAttribute("alertMsg", "게시글 수정이 완료되었습니다.");
+			mv.setViewName("redirect:/");
+		}
+		
 		return mv;
 	}
 	

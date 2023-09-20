@@ -233,7 +233,14 @@
 								<input type="hidden" id="memNo" name="memNo" value='${b.memNo }'>
 								<div id="flea_text">
 									<div id="flea_title">
-										${fn:substring (b.title, 0,10) }...
+										<c:choose>
+											<c:when test='${fn:length(b.title) gt 11 }'>
+												${fn:substring (b.title, 0,11) }...
+											</c:when>
+											<c:otherwise>
+												${b.title }
+											</c:otherwise>
+										</c:choose>
 										<div id="joayo_area"><img src=""></div>
 									</div>
 									<div id="flea_price"><strong><fmt:formatNumber value='${b.price }' pattern="#,###"/></strong>원</div>
@@ -298,23 +305,7 @@
 							</div>
 							<div id="flea_text">
 								<div id="flea_title">
-									아이폰 팔아요
-									<div id="joayo_area"><img src=""></div>
-								</div>
-								<div id="flea_price"><strong><fmt:formatNumber value="50000" pattern="#,###"/>10000</strong>원</div>
-								<div id="flea_address">서울특별시 관악구 신림동</div>
-								<div id="flea_reply">조회수 20</div>
-							</div>
-						</div>
-					</div>
-					<div class="box" id="content_el_1" onclick="location.href='boardDetail.bo?cate=1&boardNo=&memNo='">
-						<div id="flea_con">
-							<div id="flea_img">
-								<img src="">
-							</div>
-							<div id="flea_text">
-								<div id="flea_title">
-									아이폰 팔아요
+									아이폰 팔아요###334dsf
 									<div id="joayo_area"><img src=""></div>
 								</div>
 								<div id="flea_price"><strong><fmt:formatNumber value="50000" pattern="#,###"/>10000</strong>원</div>
@@ -329,7 +320,7 @@
 		<div class="page_area">
 			<div class="page">
 	            <c:forEach var="p" begin="${pi.startPage }" end="${pi.endPage }">
-	            	<button type="button" onclick="location.href='fleaListForm.bo?cate=1&currentPage=${p }&subCategory=0'" >${p }</button>
+	            	<button type="button" onclick="location.href='listForm.bo?category=1&currentPage=${p }&subCategory=0'" >${p }</button>
 	            </c:forEach>
 			</div>
 		</div>

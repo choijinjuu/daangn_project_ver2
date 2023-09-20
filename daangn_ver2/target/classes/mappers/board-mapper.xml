@@ -114,8 +114,15 @@
 		WHERE CATEGORY = 1
 		</if>
 		<if test="category == 2">
-		JOIN STORES USING(BOARD_NO)
-		WHERE CATEGORY = 2
+			<if test="subCategory == 0">
+				JOIN STORES USING(BOARD_NO)
+				WHERE CATEGORY = 2
+			</if>
+			<if test="subCategory != 0">
+				JOIN STORES USING(BOARD_NO)
+				WHERE CATEGORY = 2
+				AND SUB_CATEGORY = #{subCategory}
+			</if>
 		</if>
 		<if test="category == 3">
 		JOIN JOBS USING(BOARD_NO)
@@ -136,14 +143,27 @@
 		ORDER BY SUCCESS ASC, CREATE_DATE DESC
 		</if>
 		<if test="category == 2">
-		SELECT BOARD_NO, MEM_NO, TITLE, CONTENT, COUNT, CATEGORY, SUB_CATEGORY, AT_PATH, S.ADDRESS, OPEN_TIME, CLOSE_TIME
-		FROM BOARD B
-		JOIN ATTACHMENT USING(BOARD_NO)
-		JOIN STORES S USING(BOARD_NO)
-		JOIN MEMBER M USING(MEM_NO)
-		WHERE FILE_LEVEL = 1
-		AND CATEGORY = 2
-		ORDER BY CREATE_DATE DESC
+			<if test="subCategory == 0">
+				SELECT BOARD_NO, MEM_NO, TITLE, CONTENT, COUNT, CATEGORY, SUB_CATEGORY, AT_PATH, S.ADDRESS, OPEN_TIME, CLOSE_TIME
+				FROM BOARD B
+				JOIN ATTACHMENT USING(BOARD_NO)
+				JOIN STORES S USING(BOARD_NO)
+				JOIN MEMBER M USING(MEM_NO)
+				WHERE FILE_LEVEL = 1
+				AND CATEGORY = 2
+				ORDER BY CREATE_DATE DESC
+			</if>
+			<if test="subCategory != 0">
+				SELECT BOARD_NO, MEM_NO, TITLE, CONTENT, COUNT, CATEGORY, SUB_CATEGORY, AT_PATH, S.ADDRESS, OPEN_TIME, CLOSE_TIME
+				FROM BOARD B
+				JOIN ATTACHMENT USING(BOARD_NO)
+				JOIN STORES S USING(BOARD_NO)
+				JOIN MEMBER M USING(MEM_NO)
+				WHERE FILE_LEVEL = 1
+				AND CATEGORY = 2
+				AND SUB_CATEGORY = #{subCategory}
+				ORDER BY CREATE_DATE DESC			
+			</if>
 		</if>
 		<if test="category == 3">
 		SELECT BOARD_NO, MEM_NO, TITLE, COUNT, CATEGORY, AT_PATH, J.ADDRESS
@@ -199,13 +219,52 @@
 		WHERE BOARD_NO = #{boardNo}
 	</update>
 	
+	<!-- 게시글 수정 -->
+	<update id="updateBoard">
+		UPDATE BOARD
+		SET TITLE = #{title},
+			CONTENT = #{content}
+		WHERE BOARD_NO = #{boardNo}
+	</update>
+	<!-- 게시글 카테고리 수정 -->
+	<update id="updateCate">
+		<if test="category == 1">
+			UPDATE FLEAMARKET
+			SET SUB_CATEGORY = #{subCategory},
+				PRICE = #{price}
+			WHERE BOARD_NO = #{boardNo}
+		</if>
+		<if test="category == 2">
+			UPDATE STORES
+			SET SUB_CATEGORY = #{subCategory},
+				OPEN_TIME = #{openTime},
+				CLOSE_TIME = #{closeTime}
+			WHERE BOARD_NO = #{boardNo}
+		</if>
+		<if test="category == 3">
+			UPDATE JOBS
+			SET ADDRESS = #{address}
+			WHERE BOARD_NO = #{boardNo}
+		</if>
+	</update>
+	<!-- 수정 어태치먼트 등록 -->
+	<insert id="updateAttachment" parameterType="attachment">
+		INSERT INTO ATTACHMENT(FILE_NO,
+								BOARD_NO,
+								AT_NAME,
+								AT_CHANGE,
+								AT_PATH,
+								FILE_LEVEL)
+					VALUES(SEQ_ANO.NEXTVAL, #{boardNo}, #{atName}, #{atChange}, #{atPath}, #{fileLevel})
+	</insert>
+	
 	<!-- 게시글 삭제 -->
 	<delete id="deleteBoard">
 		DELETE BOARD
 		WHERE BOARD_NO = #{boardNo}
 	</delete>
 	<!-- 관련 어태치먼트 게시글 삭제 -->
-	<delete id="deleteATTACH">
+	<delete id="deleteAttach">
 		DELETE ATTACHMENT
 		WHERE BOARD_NO = #{boardNo}
 	</delete>
