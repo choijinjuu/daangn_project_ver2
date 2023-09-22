@@ -125,8 +125,15 @@
 			</if>
 		</if>
 		<if test="category == 3">
-		JOIN JOBS USING(BOARD_NO)
-		WHERE CATEGORY = 3
+			<if test="subCategory == 0">
+				JOIN JOBS USING(BOARD_NO)
+				WHERE CATEGORY = 3			
+			</if>
+			<if test="subCategory != 0">
+				JOIN JOBS USING(BOARD_NO)
+				WHERE CATEGORY = 3
+				AND ADDRESS LIKE '%'||#{search}||'%'
+			</if>
 		</if>
 	</select>
 	
@@ -166,14 +173,27 @@
 			</if>
 		</if>
 		<if test="category == 3">
-		SELECT BOARD_NO, MEM_NO, TITLE, COUNT, CATEGORY, AT_PATH, J.ADDRESS
-		FROM BOARD B
-		JOIN ATTACHMENT USING(BOARD_NO)
-		JOIN JOBS J USING(BOARD_NO)
-		JOIN MEMBER M USING(MEM_NO)
-		WHERE FILE_LEVEL = 1
-		AND CATEGORY = 3
-		ORDER BY CREATE_DATE DESC
+			<if test="subCategory == 0">
+				SELECT BOARD_NO, MEM_NO, TITLE, COUNT, CATEGORY, AT_PATH, J.ADDRESS
+				FROM BOARD B
+				JOIN ATTACHMENT USING(BOARD_NO)
+				JOIN JOBS J USING(BOARD_NO)
+				JOIN MEMBER M USING(MEM_NO)
+				WHERE FILE_LEVEL = 1
+				AND CATEGORY = 3
+				ORDER BY CREATE_DATE DESC
+			</if>
+			<if test="subCategory != 0">
+				SELECT BOARD_NO, MEM_NO, TITLE, COUNT, CATEGORY, AT_PATH, J.ADDRESS
+				FROM BOARD B
+				JOIN ATTACHMENT USING(BOARD_NO)
+				JOIN JOBS J USING(BOARD_NO)
+				JOIN MEMBER M USING(MEM_NO)
+				WHERE FILE_LEVEL = 1
+				AND CATEGORY = 3
+				AND J.ADDRESS LIKE '%'||#{search}||'%'
+				ORDER BY CREATE_DATE DESC			
+			</if>
 		</if>
 	</select>
 	

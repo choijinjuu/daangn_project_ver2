@@ -33,7 +33,8 @@ public class BoardController {
 	@RequestMapping("listForm.bo")
 	public ModelAndView ListForm(@RequestParam(value="category", defaultValue="1")String category,
 								@RequestParam(value="currentPage", defaultValue="0")int currentPage,
-								@RequestParam(value="subCategory", defaultValue="0")String subCategory, ModelAndView mv) {
+								@RequestParam(value="subCategory", defaultValue="0")String subCategory,
+								@RequestParam(value="search", defaultValue="0")String search, ModelAndView mv) {
 		
 		//축제 페이지 로드시 찜 리스트 불러오기
 //		ArrayList<choice> choiceList = festivalService.choiList();
@@ -82,20 +83,40 @@ public class BoardController {
 			
 			//게시글 총 수
 			int listCount = boardService.listCount(keyword);
-			System.out.println(listCount);
+			
 			int pageLimit = 10;
-			int boardLimit = 8;
+			int boardLimit = 6;
 			
 			PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
 			
 			//게시글 리스트
 			ArrayList<Board> list = boardService.boardList(keyword, pi);
-			System.out.println(list);
+			
 			mv.addObject("list", list);
 			mv.addObject("pi", pi);
 			mv.setViewName("board/storeForm");
 		}else {
+			//알바 게시판
+			//검색 리스트 가져가기
+			HashMap<String, String> keyword = new HashMap<>();
+				keyword.put("category", category);
+				keyword.put("subCategory", subCategory);
+				keyword.put("search", search);
 			
+			//게시글 총 수
+			int listCount = boardService.listCount(keyword);
+			
+			int pageLimit = 10;
+			int boardLimit = 6;
+			
+			PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+			
+			//게시글 리스트
+			ArrayList<Board> list = boardService.boardList(keyword, pi);
+			
+			mv.addObject("list", list);
+			mv.addObject("pi", pi);
+			mv.setViewName("board/jobForm");
 		}
 		
 		return mv;
@@ -120,15 +141,15 @@ public class BoardController {
 			
 			switch(b.getSubCategory()) {
 				case "1" : b.setSubCategory("디지털기기");
-				break;
+						break;
 				case "2" : b.setSubCategory("스포츠, 레저");
-				break;
+						break;
 				case "3" : b.setSubCategory("생활, 가전");
-				break;
+						break;
 				case "4" : b.setSubCategory("티켓, 교환권");
-				break;
+						break;
 				case "5" : b.setSubCategory("기타");
-				break;
+						break;
 			}
 
 			//조회수도 올려주기
@@ -137,8 +158,6 @@ public class BoardController {
 //			request.setAttribute("Reply", r);
 			
 			//요청 페이지로 위임
-//			request.getRequestDispatcher("views/board/fleaDetailForm.jsp").forward(request, response);		
-			
 			mv.addObject("b", b).setViewName("board/fleaDetailForm");
 			
 		}else if(b.getCategory().equals("2")) {
@@ -146,7 +165,7 @@ public class BoardController {
 			//동네가게에서 들어왔을시
 			b = boardService.boardDetail(boardInfo);
 //			ArrayList<Reply> r = new ReplyService().selectReply(boardNo);
-			
+
 			switch(b.getSubCategory()) {
 				case "1" : b.setSubCategory("식당");
 						break;
@@ -159,22 +178,22 @@ public class BoardController {
 				case "5" : b.setSubCategory("기타");
 						break;
 			}
-			
+
 			//조회수도 올려주기
 			boardService.countUp(b.getBoardNo());
 
-			mv.addObject("Board", b).setViewName("board/fleaDetailForm");
+			mv.addObject("b", b).setViewName("board/storeDetailForm");
 			
 		}else {
 			
 			//알바로 들어왔을시
 			b = boardService.boardDetail(boardInfo);
 //			ArrayList<Reply> r = new ReplyService().selectReply(boardNo);
-			
+			System.out.println(b);
 			//조회수도 올려주기
 			boardService.countUp(b.getBoardNo());
 
-			mv.addObject("Board", b).setViewName("board/fleaDetailForm");
+			mv.addObject("b", b).setViewName("board/jobDetailForm");
 			
 		}
 		return mv;

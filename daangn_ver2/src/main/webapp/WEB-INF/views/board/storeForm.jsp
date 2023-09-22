@@ -203,7 +203,7 @@
 			</div>
 			<div id="content_el">
 				<c:forEach var="b" items="${list }">
-					<div class="box" id="content_el_1" onclick="location.href='boardDetail.bo?cate=2&boardNo=${b.boardNo}&memNo=${b.memNo }'">
+					<div class="box" id="content_el_1" onclick="location.href='boardDetail.bo?category=2&boardNo=${b.boardNo}&memNo=${b.memNo }'">
 						<div id="flea_con">
 							<div id="flea_img">
 								<img src="${b.attachment.atPath }">
@@ -213,10 +213,10 @@
 								<div id="flea_title"><strong>${b.title }</strong></div>
 									<c:choose>
 										<c:when test="${fn:length(b.content) gt 26 }">
-											<div id="flea_price"><span>${fn:substring (b.content, 0,26) }</span></div>
+											<div id="flea_price"><span>${fn:substring (b.content, 0,26) }...</span></div>
 										</c:when>
 										<c:when test="${fn:length(b.content) lt 26 }">
-											<div id="flea_price"><span>${b.content }...</span></div>
+											<div id="flea_price"><span>${b.content }</span></div>
 										</c:when>
 									</c:choose>
 								<div id="flea_reply">조회수 ${b.count }</div>
