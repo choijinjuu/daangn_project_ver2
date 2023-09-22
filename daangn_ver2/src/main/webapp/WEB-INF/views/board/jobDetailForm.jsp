@@ -265,7 +265,8 @@
 			<div class="detail_text">
 				<div id="flea_title"><strong>상세내용</strong></div>
 				<div>
-					<pre>${b.content }</pre>		
+					<pre>${b.content }</pre>
+					<!-- 테스트 -->		
 				</div>
 			</div>
 			<div id="flea_map_area">
