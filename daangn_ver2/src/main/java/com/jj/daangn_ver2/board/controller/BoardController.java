@@ -190,7 +190,7 @@ public class BoardController {
 			b = boardService.boardDetail(boardInfo);
 //			ArrayList<Reply> r = new ReplyService().selectReply(boardNo);
 			System.out.println(b);
-			//조회수도 올려주기
+			//조회수도 올려주기ㅇㄹㅇㄴ
 			boardService.countUp(b.getBoardNo());
 
 			mv.addObject("b", b).setViewName("board/jobDetailForm");
