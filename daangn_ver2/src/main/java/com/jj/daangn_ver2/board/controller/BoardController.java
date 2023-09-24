@@ -382,4 +382,33 @@ public class BoardController {
 		
 		return mv;
 	}
+	
+	//게시글 검색
+	@RequestMapping("search.bo")
+	public ModelAndView searchBoard(@RequestParam(value="category", defaultValue="4")String category,
+			@RequestParam(value="currentPage", defaultValue="0")int currentPage,
+							@RequestParam("search_t")String search, ModelAndView mv) {
+		
+		//검색 리스트 가져가기
+		HashMap<String, String> keyword = new HashMap<>();
+			keyword.put("category", category);
+			keyword.put("subCategory", search);
+		
+		//게시글 총 수
+		int listCount = boardService.listCount(keyword);
+		
+		int pageLimit = 10;
+		int boardLimit = 6;
+		
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
+		
+		//게시글 리스트
+		ArrayList<Board> list = boardService.boardList(keyword, pi);
+		
+		mv.addObject("list", list);
+		mv.addObject("pi", pi);
+		mv.setViewName("board/fleaForm");
+		
+		return mv;
+	}
 }

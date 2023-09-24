@@ -18,4 +18,7 @@ public interface MemberService {
 	//아이디 찾기 및 비밀번호 찾기 진행시 인증번호 발송
 	String searchMe(HashMap<String, String> info);
 
+	//정보 수정
+	int updateMember(Member m);
+
 }

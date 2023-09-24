@@ -1,5 +1,9 @@
 package com.jj.daangn_ver2.member.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -24,9 +28,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
+import com.jj.daangn_ver2.board.model.vo.Attachment;
 import com.jj.daangn_ver2.member.model.service.MemberService;
 import com.jj.daangn_ver2.member.model.vo.Member;
 
@@ -230,5 +236,54 @@ public class MemberController {
 	@RequestMapping("mypage.me")
 	public String goMypage() {
 		return "member/mypageForm";
+	}
+	
+	//정보 수정
+	@RequestMapping("updateMy.me")
+	public ModelAndView updateMember(Member m, MultipartFile file1, HttpSession session, ModelAndView mv) {
+		
+		if(!file1.getOriginalFilename().equals("")) {//파일이 있으면
+			
+			String originName = file1.getOriginalFilename();
+			String currentTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+			int ranNum = (int) (Math.random()*90000+10000);
+			//확장자명 추출
+			String ext = originName.substring(originName.lastIndexOf("."));
+			//추출한 문자열 합쳐서 changeName만들기
+			String changeName = currentTime+ranNum+ext;
+			m.setProfileImg("resources/member_img/"+changeName);
+			
+			//업로드하는 경로
+			String filePath = session.getServletContext().getRealPath("/resources/member_img/");
+			
+			//경로와 수정파일명 합쳐서 파일 업로드
+			try {
+				file1.transferTo(new File(filePath+changeName));
+			} catch (IllegalStateException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			//비밀번호 암호화
+			String encPwd = bcryptPasswordEncoder.encode(m.getMemPwd());
+			m.setMemPwd(encPwd);
+			
+			int result = memberService.updateMember(m);
+			
+			if(result>0) {
+				//로그인 멤버 세션 업데이트
+				Member loginMember = memberService.loginMember(m);
+
+				session.setAttribute("loginMember", loginMember);
+				session.setAttribute("alertMsg", "정보 수정을 성공하였습니다. 로그인을 다시 시도해주세요.");
+				mv.setViewName("redirect:/");
+				
+			}else {
+				mv.addObject("errorMsg", "정보 수정에 실패하셨습니다.").setViewName("common/errorPage");
+			}
+			
+		}
+		
+		return mv;
 	}
 }

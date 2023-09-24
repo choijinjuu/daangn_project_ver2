@@ -58,10 +58,24 @@
 	
 	<!-- 로그인 -->
 	<select id="loginMember" parameterType="member" resultMap="memberResultSet">
-		SELECT *
+		SELECT MEM_NO, MEM_ID, NICKNAME, MEM_PWD, ADDRESS,
+		        EMAIL, PROFILE_IMG, TO_CHAR(UPDATE_DATE, 'YYYY-MM-DD') "UPDATE_DATE",
+		        TO_CHAR(ENROLL_DATE, 'YYYY-MM-DD') "ENROLL_DATE", STATUS, MEM_NAME
 		FROM MEMBER
 		WHERE MEM_ID = #{memId}
 		AND STATUS = 1
 	</select>
+	
+	<!-- 정보 수정 메소드 -->
+	<update id="updateMember" parameterType="member">
+	UPDATE MEMBER
+	SET NICKNAME = #{nickName},
+		MEM_PWD = #{memPwd},
+		ADDRESS = #{address},
+		EMAIL = #{email},
+		PROFILE_IMG = #{profileImg},
+		UPDATE_DATE = SYSDATE
+	WHERE MEM_NO = #{memNo}
+	</update>
 
 </mapper>

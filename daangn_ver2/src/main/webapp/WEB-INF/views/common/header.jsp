@@ -37,34 +37,36 @@
 		<c:remove var="alertMsg" scope="session"/>
 	</c:if>
 
-    <div class="menubar_wrap">
-        <div class="menubar_el1" id="banner">
-            <div id="banner_img"><a href="index.jsp"><img src="resources/css_img/logo.png"></a></div>
-        </div>
-        <div class="menubar_el1" id="menu">
-            <div id="flea"><a href="listForm.bo?category=1&currentPage=1&subCategory=0" id="flea">중고거래</a></div>
-            <div id="market"><a href="listForm.bo?category=2&currentPage=1&subCategory=0" id="store">동네가게</a></div>
-            <div id="job"><a href="listForm.bo?category=3&currentPage=1&subCategory=0" id="job">알바</a></div>
-        </div>
-        <div class="menubar_el1" id="search">
-            	<div id="search_text"><input type="text" id="text_area" placeholder="&nbsp;물품이나 동네를 검색해보세요!"></div>
-            	<div id="search_img"><button type="submit"><img src="resources/css_img/search_img.png"></button></div>
-        </div>
-        <div class="menubar_el1" id="loginbar">
-        	<c:choose>
-        		<c:when test="${empty loginMember }">
-        			<!-- 로그인 전 -->
-	        	    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">로그인</button>
-    	        	<button type="button" id="jointext" onclick="location.href='enrollForm.me'">회원가입</button>
-        		</c:when>
-        		<c:when test="${not empty loginMember }">
-		            <div onclick="location.href='mypage.me'"><img id="profile_img"></div>
-		            <a href="mypage.me">마이페이지</a>
-		            <a href="logout.me" id="logout">로그아웃</a>
-        		</c:when>
-        	</c:choose>
-        </div>
-    </div>
+   	<form action="search.bo">
+	    <div class="menubar_wrap">
+	        <div class="menubar_el1" id="banner">
+	            <div id="banner_img"><a href="index.jsp"><img src="resources/css_img/logo.png"></a></div>
+	        </div>
+	        <div class="menubar_el1" id="menu">
+	            <div id="flea"><a href="listForm.bo?category=1&currentPage=1&subCategory=0" id="flea">중고거래</a></div>
+	            <div id="market"><a href="listForm.bo?category=2&currentPage=1&subCategory=0" id="store">동네가게</a></div>
+	            <div id="job"><a href="listForm.bo?category=3&currentPage=1&subCategory=0" id="job">알바</a></div>
+	        </div>
+	        <div class="menubar_el1" id="search">
+	           	<div id="search_text"><input type="text" name="search_t" id="text_area" placeholder="&nbsp;물품이나 동네를 검색해보세요!"></div>
+	           	<div id="search_img"><button type="submit"><img src="resources/css_img/search_img.png"></button></div>
+	        </div>
+	        <div class="menubar_el1" id="loginbar">
+	        	<c:choose>
+	        		<c:when test="${empty loginMember }">
+	        			<!-- 로그인 전 -->
+		        	    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">로그인</button>
+	    	        	<button type="button" id="jointext" onclick="location.href='enrollForm.me'">회원가입</button>
+	        		</c:when>
+	        		<c:when test="${not empty loginMember }">
+			            <div onclick="location.href='mypage.me'"><img id="profile_img"></div>
+			            <a href="mypage.me">마이페이지</a>
+			            <a href="logout.me" id="logout">로그아웃</a>
+	        		</c:when>
+	        	</c:choose>
+	        </div>
+	    </div>
+    </form>
     
   	<!-- 로그인 모달 -->
   	<form action="login.me">
